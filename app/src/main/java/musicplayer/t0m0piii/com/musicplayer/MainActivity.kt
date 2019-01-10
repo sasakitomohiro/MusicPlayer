@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.TextView
 import androidx.loader.content.CursorLoader
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.DefaultRenderersFactory
@@ -27,6 +28,9 @@ class MainActivity : AppCompatActivity() {
     private val playerView by lazy {
         findViewById<PlayerView>(R.id.playerView)
     }
+    private val title by lazy {
+        findViewById<TextView>(R.id.title)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,9 +49,11 @@ class MainActivity : AppCompatActivity() {
 
         cursor = cursorLoader.loadInBackground()!!
         val pathIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
+        val nameIndex = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
         cursor.moveToFirst()
 
         uri = Uri.fromFile(File(cursor.getString(pathIndex)))
+        title.text = cursor.getString(nameIndex)
         player = ExoPlayerFactory.newSimpleInstance(
             DefaultRenderersFactory(applicationContext),
             DefaultTrackSelector(),
