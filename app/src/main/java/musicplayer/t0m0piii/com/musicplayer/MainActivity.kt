@@ -24,8 +24,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mediaSource: MediaSource
     private lateinit var extractorMediaSourceFactory: ExtractorMediaSource.Factory
     private lateinit var cursor: Cursor
-    private var pathIndex: Int = 0
-    private var nameIndex: Int = 0
     private val playerView by lazy {
         findViewById<PlayerView>(R.id.playerView)
     }
@@ -46,8 +44,7 @@ class MainActivity : AppCompatActivity() {
             MediaStore.Files.FileColumns.DATE_ADDED + " DESC")
 
         cursor = cursorLoader.loadInBackground()!!
-        pathIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
-        nameIndex = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
+        val pathIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
         cursor.moveToFirst()
 
         uri = Uri.fromFile(File(cursor.getString(pathIndex)))
