@@ -1,41 +1,36 @@
 package musicplayer.t0m0piii.com.musicplayer
 
+import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.widget.TextView
+import android.view.View
 import androidx.loader.content.CursorLoader
-import com.google.android.exoplayer2.DefaultLoadControl
-import com.google.android.exoplayer2.DefaultRenderersFactory
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ExtractorMediaSource
-import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.ui.PlayerView
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var uri: Uri
-    private lateinit var player: SimpleExoPlayer
-    private lateinit var mediaSource: MediaSource
-    private lateinit var extractorMediaSourceFactory: ExtractorMediaSource.Factory
     private lateinit var cursor: Cursor
-    private val playerView by lazy {
-        findViewById<PlayerView>(R.id.playerView)
-    }
-    private val title by lazy {
-        findViewById<TextView>(R.id.title)
+    private val groupAdapter = GroupAdapter<ViewHolder>()
+    private val items: ArrayList<MusicItem> = ArrayList()
+    private val recyclerView by lazy {
+        findViewById<RecyclerView>(R.id.recyclerView)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = groupAdapter
         val selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO
         val  projection: Array<String> = arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media.DISPLAY_NAME)
         val queryUri = MediaStore.Files.getContentUri("external")
@@ -52,17 +47,19 @@ class MainActivity : AppCompatActivity() {
         val nameIndex = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
         cursor.moveToFirst()
 
+        while (!cursor.isLast) {
+            val onClickListener = View.OnClickListener {
+                val intent = Intent(this, MusicPlayerActivity::class.java)
+                intent.putExtra("uri", cursor.getString(pathIndex))
+                intent.putExtra("title", cursor.getString(nameIndex))
+                startActivity(intent)
+            }
+            items.add(MusicItem(cursor.getString(nameIndex), onClickListener))
+            cursor.moveToNext()
+        }
+
         uri = Uri.fromFile(File(cursor.getString(pathIndex)))
-        title.text = cursor.getString(nameIndex)
-        player = ExoPlayerFactory.newSimpleInstance(
-            DefaultRenderersFactory(applicationContext),
-            DefaultTrackSelector(),
-            DefaultLoadControl()
-        )
-        extractorMediaSourceFactory = ExtractorMediaSource.Factory(DefaultDataSourceFactory(applicationContext, "ExoPlayerSample"))
-        mediaSource = extractorMediaSourceFactory.createMediaSource(uri)
-        player.prepare(mediaSource)
-        player.playWhenReady = false
-        playerView.player = player
+
+        groupAdapter.update(items)
     }
 }

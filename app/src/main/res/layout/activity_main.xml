@@ -7,18 +7,9 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/title"
-            android:layout_margin="10dp"
-            tools:text="title"/>
-
-    <com.google.android.exoplayer2.ui.PlayerView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:id="@+id/playerView"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:layout_height="match_parent"
+            android:id="@+id/recyclerView"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
