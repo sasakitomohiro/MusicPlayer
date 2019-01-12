@@ -23,6 +23,9 @@ class MainActivity : AppCompatActivity() {
     private val recyclerView by lazy {
         findViewById<RecyclerView>(R.id.recyclerView)
     }
+    private lateinit var cursorLoader: CursorLoader
+    private var pathIndex = 0
+    private var nameIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,17 +37,30 @@ class MainActivity : AppCompatActivity() {
         val selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO
         val  projection: Array<String> = arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media.DISPLAY_NAME)
         val queryUri = MediaStore.Files.getContentUri("external")
-        val cursorLoader = CursorLoader(
+        cursorLoader = CursorLoader(
             applicationContext,
             queryUri,
             projection,
             selection,
             null,
             MediaStore.Files.FileColumns.DATE_ADDED + " DESC")
+    }
 
+    override fun onResume() {
+        super.onResume()
+        load()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        cursor.close()
+    }
+
+    private fun load() {
+        items.clear()
         cursor = cursorLoader.loadInBackground()!!
-        val pathIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
-        val nameIndex = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
+        pathIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
+        nameIndex = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
         cursor.moveToFirst()
 
         while (!cursor.isLast) {
@@ -59,10 +75,5 @@ class MainActivity : AppCompatActivity() {
             cursor.moveToNext()
         }
         groupAdapter.update(items)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        cursor.close()
     }
 }
