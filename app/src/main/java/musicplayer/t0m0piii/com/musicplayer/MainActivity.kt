@@ -60,4 +60,9 @@ class MainActivity : AppCompatActivity() {
         }
         groupAdapter.update(items)
     }
+
+    override fun onStop() {
+        super.onStop()
+        cursor.close()
+    }
 }
