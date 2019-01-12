@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import androidx.loader.content.CursorLoader
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +17,6 @@ import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var uri: Uri
     private lateinit var cursor: Cursor
     private val groupAdapter = GroupAdapter<ViewHolder>()
     private val items: ArrayList<MusicItem> = ArrayList()
@@ -48,18 +48,16 @@ class MainActivity : AppCompatActivity() {
         cursor.moveToFirst()
 
         while (!cursor.isLast) {
-            val onClickListener = View.OnClickListener {
+            val name = cursor.getString(nameIndex)
+            val path = cursor.getString(pathIndex)
+            items.add(MusicItem(cursor.getString(nameIndex), View.OnClickListener {
                 val intent = Intent(this, MusicPlayerActivity::class.java)
-                intent.putExtra("uri", cursor.getString(pathIndex))
-                intent.putExtra("title", cursor.getString(nameIndex))
+                intent.putExtra("uri", path)
+                intent.putExtra("title", name)
                 startActivity(intent)
-            }
-            items.add(MusicItem(cursor.getString(nameIndex), onClickListener))
+            }))
             cursor.moveToNext()
         }
-
-        uri = Uri.fromFile(File(cursor.getString(pathIndex)))
-
         groupAdapter.update(items)
     }
 }
