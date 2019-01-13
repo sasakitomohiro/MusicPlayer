@@ -26,7 +26,6 @@
                     app:behavior_hideable="false"
                     app:behavior_peekHeight="80dp"
                     app:layout_behavior="@string/bottom_sheet_behavior"
-                    android:background="@color/colorPrimaryDark"
                     app:layout_constraintBottom_toBottomOf="parent">
 
                 <FrameLayout
