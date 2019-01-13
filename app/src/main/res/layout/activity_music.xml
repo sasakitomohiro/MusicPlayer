@@ -17,14 +17,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/recyclerView"
-                    android:layout_marginBottom="80dp"/>
+                    android:layout_marginBottom="60dp"/>
+
+            <View
+                    android:id="@+id/shadow"
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:background="@drawable/shape_gradient_top_shadow"
+                    app:layout_anchor="@id/bottomSheet" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/bottomSheet"
                     app:behavior_hideable="false"
-                    app:behavior_peekHeight="80dp"
+                    app:behavior_peekHeight="60dp"
                     app:layout_behavior="@string/bottom_sheet_behavior"
                     app:layout_constraintBottom_toBottomOf="parent">
 
