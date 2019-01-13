@@ -7,14 +7,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:padding="10dp"
+            android:background="?android:attr/selectableItemBackground"
+            >
 
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/title"
+                android:id="@+id/name"
                 android:layout_margin="10dp"
-                tools:text="title"/>
+                tools:text="name"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

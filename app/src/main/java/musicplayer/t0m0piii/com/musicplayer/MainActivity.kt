@@ -1,6 +1,5 @@
 package musicplayer.t0m0piii.com.musicplayer
 
-import android.content.Intent
 import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,10 +22,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cursorLoader: CursorLoader
     private var pathIndex = 0
     private var nameIndex = 0
+    private lateinit var musicPlayerFragment: MusicPlayerFragment
+    private val fragmentManager = supportFragmentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        musicPlayerFragment = MusicPlayerFragment.newInstance().apply {
+            val transaction = this@MainActivity.fragmentManager.beginTransaction().replace(R.id.player, this)
+            transaction.commit()
+        }
 
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
@@ -59,10 +65,7 @@ class MainActivity : AppCompatActivity() {
             val name = cursor.getString(nameIndex)
             val path = cursor.getString(pathIndex)
             items.add(MusicItem(cursor.getString(nameIndex), View.OnClickListener {
-                val intent = Intent(this, MusicPlayerActivity::class.java)
-                intent.putExtra("uri", path)
-                intent.putExtra("title", name)
-                startActivity(intent)
+                musicPlayerFragment.playMusic(path, name)
             }))
             cursor.moveToNext()
         }
