@@ -41,6 +41,11 @@ class MusicPlayerFragment : Fragment() {
         return binding.root
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        player.playWhenReady = false
+    }
+
     fun playMusic(path: String, name: String) {
         player.playWhenReady = false
         binding.name.text= name
