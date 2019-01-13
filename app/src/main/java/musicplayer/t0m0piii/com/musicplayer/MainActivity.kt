@@ -48,11 +48,6 @@ class MainActivity : AppCompatActivity() {
         load()
     }
 
-    override fun onStop() {
-        super.onStop()
-        cursor.close()
-    }
-
     private fun load() {
         items.clear()
         cursor = cursorLoader.loadInBackground()!!
@@ -72,5 +67,6 @@ class MainActivity : AppCompatActivity() {
             cursor.moveToNext()
         }
         groupAdapter.update(items)
+        cursor.close()
     }
 }
