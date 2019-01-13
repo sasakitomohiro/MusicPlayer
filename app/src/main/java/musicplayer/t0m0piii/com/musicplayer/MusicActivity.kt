@@ -1,6 +1,7 @@
 package musicplayer.t0m0piii.com.musicplayer
 
 import android.database.Cursor
+import android.database.CursorIndexOutOfBoundsException
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -60,13 +61,17 @@ class MusicActivity : AppCompatActivity() {
         nameIndex = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
         cursor.moveToFirst()
 
-        while (!cursor.isLast) {
-            val name = cursor.getString(nameIndex)
-            val path = cursor.getString(pathIndex)
-            items.add(MusicItem(cursor.getString(nameIndex), View.OnClickListener {
-                musicPlayerFragment.playMusic(path, name)
-            }))
-            cursor.moveToNext()
+        if (cursor.count == 0) {
+            items.add(MusicItem("データがありません", null))
+        } else {
+            while (!cursor.isLast) {
+                val name = cursor.getString(nameIndex)
+                val path = cursor.getString(pathIndex)
+                items.add(MusicItem(cursor.getString(nameIndex), View.OnClickListener {
+                    musicPlayerFragment.playMusic(path, name)
+                }))
+                cursor.moveToNext()
+            }
         }
         groupAdapter.update(items)
         cursor.close()
