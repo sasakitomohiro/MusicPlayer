@@ -34,6 +34,8 @@ class SplashActivity : AppCompatActivity() {
         if (requestCode == REQUEST_READ_EXTERNAL_STORAGE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 moveToMusicActivity()
+            } else {
+                finish()
             }
         }
     }
