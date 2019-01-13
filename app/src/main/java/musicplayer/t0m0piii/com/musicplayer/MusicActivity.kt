@@ -5,20 +5,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import androidx.databinding.DataBindingUtil
 import androidx.loader.content.CursorLoader
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import musicplayer.t0m0piii.com.musicplayer.databinding.ActivityMusicBinding
 
-class MainActivity : AppCompatActivity() {
-
+class MusicActivity : AppCompatActivity() {
+    private val binding: ActivityMusicBinding by lazy {
+      DataBindingUtil.setContentView<ActivityMusicBinding>(this, R.layout.activity_music)
+    }
     private lateinit var cursor: Cursor
     private val groupAdapter = GroupAdapter<ViewHolder>()
     private val items: ArrayList<MusicItem> = ArrayList()
-    private val recyclerView by lazy {
-        findViewById<RecyclerView>(R.id.recyclerView)
-    }
     private lateinit var cursorLoader: CursorLoader
     private var pathIndex = 0
     private var nameIndex = 0
@@ -27,16 +27,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         musicPlayerFragment = MusicPlayerFragment.newInstance().apply {
-            val transaction = this@MainActivity.fragmentManager.beginTransaction().replace(R.id.player, this)
+            val transaction = this@MusicActivity.fragmentManager.beginTransaction().replace(R.id.player, this)
             transaction.commit()
         }
 
         val layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = groupAdapter
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.adapter = groupAdapter
         val selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO
         val  projection: Array<String> = arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media.DISPLAY_NAME)
         val queryUri = MediaStore.Files.getContentUri("external")
