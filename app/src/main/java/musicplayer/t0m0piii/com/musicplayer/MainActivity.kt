@@ -2,18 +2,15 @@ package musicplayer.t0m0piii.com.musicplayer
 
 import android.content.Intent
 import android.database.Cursor
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import androidx.loader.content.CursorLoader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
-import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
