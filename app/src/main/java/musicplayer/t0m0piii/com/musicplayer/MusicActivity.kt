@@ -38,7 +38,6 @@ class MusicActivity : AppCompatActivity() {
             transaction.commit()
         }
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetBehavior)
-
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = groupAdapter

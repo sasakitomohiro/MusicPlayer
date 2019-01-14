@@ -66,9 +66,7 @@ class MusicPlayerFragment : Fragment() {
 
             override fun onSeekProcessed() {
             }
-
         })
-
         return binding.root
     }
 
@@ -79,7 +77,7 @@ class MusicPlayerFragment : Fragment() {
 
     fun playMusic(path: String, name: String) {
         player.playWhenReady = false
-        binding.name.text= name
+        binding.name.text = name
         uri = Uri.parse(path)
         mediaSource = extractorMediaSourceFactory.createMediaSource(uri)
         player.prepare(mediaSource)
