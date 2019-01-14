@@ -1,14 +1,16 @@
 package musicplayer.t0m0piii.com.musicplayer
 
+import android.content.Intent
 import android.database.Cursor
-import android.database.CursorIndexOutOfBoundsException
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.loader.content.CursorLoader
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import musicplayer.t0m0piii.com.musicplayer.databinding.ActivityMusicBinding
@@ -18,13 +20,15 @@ class MusicActivity : AppCompatActivity() {
       DataBindingUtil.setContentView<ActivityMusicBinding>(this, R.layout.activity_music)
     }
     private lateinit var cursor: Cursor
+    private lateinit var cursorLoader: CursorLoader
+    private lateinit var musicPlayerFragment: MusicPlayerFragment
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
+    private val fragmentManager = supportFragmentManager
+    private val homeIntent: Intent = Intent(Intent.ACTION_MAIN)
     private val groupAdapter = GroupAdapter<ViewHolder>()
     private val items: ArrayList<MusicItem> = ArrayList()
-    private lateinit var cursorLoader: CursorLoader
     private var pathIndex = 0
     private var nameIndex = 0
-    private lateinit var musicPlayerFragment: MusicPlayerFragment
-    private val fragmentManager = supportFragmentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +37,7 @@ class MusicActivity : AppCompatActivity() {
             val transaction = this@MusicActivity.fragmentManager.beginTransaction().replace(R.id.player, this)
             transaction.commit()
         }
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetBehavior)
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
@@ -52,6 +57,16 @@ class MusicActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         load()
+    }
+
+    override fun onBackPressed() {
+        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        } else {
+            homeIntent.addCategory(Intent.CATEGORY_HOME)
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(homeIntent)
+        }
     }
 
     private fun load() {
