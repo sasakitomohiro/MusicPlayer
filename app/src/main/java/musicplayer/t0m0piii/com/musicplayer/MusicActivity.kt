@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.loader.content.CursorLoader
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -25,7 +25,9 @@ class MusicActivity : AppCompatActivity() {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
     private val fragmentManager = supportFragmentManager
     private val homeIntent: Intent = Intent(Intent.ACTION_MAIN)
-    private val groupAdapter = GroupAdapter<ViewHolder>()
+    private val groupAdapter = GroupAdapter<ViewHolder>().apply {
+        spanCount = 2
+    }
     private val items: ArrayList<MusicItem> = ArrayList()
     private var pathIndex = 0
     private var nameIndex = 0
@@ -38,9 +40,12 @@ class MusicActivity : AppCompatActivity() {
             transaction.commit()
         }
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetBehavior)
-        val layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = groupAdapter
+        binding.recyclerView.apply {
+            adapter = groupAdapter
+            layoutManager = GridLayoutManager(context, groupAdapter.spanCount).apply {
+                spanSizeLookup = groupAdapter.spanSizeLookup
+            }
+        }
         val selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO
         val  projection: Array<String> = arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media.DISPLAY_NAME)
         val queryUri = MediaStore.Files.getContentUri("external")

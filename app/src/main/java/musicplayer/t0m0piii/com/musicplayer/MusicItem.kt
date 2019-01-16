@@ -11,4 +11,8 @@ class MusicItem(val name: String, val onClickListener: View.OnClickListener?) : 
         viewBinding.name.text = name
         viewBinding.root.setOnClickListener(onClickListener)
     }
+
+    override fun getSpanSize(spanCount: Int, position: Int): Int {
+        return 1
+    }
 }
