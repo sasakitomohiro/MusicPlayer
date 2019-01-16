@@ -6,13 +6,16 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import musicplayer.t0m0piii.com.musicplayer.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySplashBinding
     val REQUEST_READ_EXTERNAL_STORAGE = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
 
         Handler().postDelayed({
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
