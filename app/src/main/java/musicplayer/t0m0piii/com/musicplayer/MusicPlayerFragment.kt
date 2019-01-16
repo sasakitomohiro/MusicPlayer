@@ -21,6 +21,37 @@ class MusicPlayerFragment : Fragment() {
     private lateinit var player: SimpleExoPlayer
     private lateinit var mediaSource: MediaSource
     private lateinit var extractorMediaSourceFactory: ExtractorMediaSource.Factory
+    private val eventListener = object : Player.EventListener {
+        override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) {
+        }
+
+        override fun onSeekProcessed() {
+        }
+
+        override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
+        }
+
+        override fun onPlayerError(error: ExoPlaybackException?) {
+        }
+
+        override fun onLoadingChanged(isLoading: Boolean) {
+        }
+
+        override fun onPositionDiscontinuity(reason: Int) {
+        }
+
+        override fun onRepeatModeChanged(repeatMode: Int) {
+        }
+
+        override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
+        }
+
+        override fun onTimelineChanged(timeline: Timeline?, manifest: Any?, reason: Int) {
+        }
+
+        override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentMusicPlayerBinding.inflate(inflater, container, false)
@@ -36,37 +67,7 @@ class MusicPlayerFragment : Fragment() {
         player.prepare(mediaSource)
         player.playWhenReady = false
         binding.playerView.player = player
-        player.addListener(object: Player.EventListener {
-            override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
-            }
-
-            override fun onPlayerError(error: ExoPlaybackException?) {
-            }
-
-            override fun onLoadingChanged(isLoading: Boolean) {
-            }
-
-            override fun onPositionDiscontinuity(reason: Int) {
-            }
-
-            override fun onRepeatModeChanged(repeatMode: Int) {
-            }
-
-            override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
-            }
-
-            override fun onTimelineChanged(timeline: Timeline?, manifest: Any?, reason: Int) {
-            }
-
-            override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-            }
-
-            override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) {
-            }
-
-            override fun onSeekProcessed() {
-            }
-        })
+        player.addListener(eventListener)
         return binding.root
     }
 
