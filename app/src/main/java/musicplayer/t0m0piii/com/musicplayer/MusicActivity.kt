@@ -73,6 +73,7 @@ class MusicActivity : AppCompatActivity() {
         }
     }
 
+    // TODO データが大量でも大丈夫なように非同期でロードしたい
     private fun load() {
         items.clear()
         cursor = cursorLoader.loadInBackground()!!
